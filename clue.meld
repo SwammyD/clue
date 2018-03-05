@@ -1,0 +1,51 @@
+;;;; -*-  Mode: LISP; Syntax: Common-Lisp; Base: 10                          -*-
+;;;; ---------------------------------------------------------------------------
+;;;; File name: hangout-ontology.meld
+;;;;    System: FIRE
+;;;;    Author: Anne Barrett
+;;;;   Created: February 2, 2018
+;;;;   Purpose: 371 Assignment three
+;;;; ---------------------------------------------------------------------------
+;;;;  modified: Friday, February 2, 2018
+;;;; ---------------------------------------------------------------------------
+
+(in-microtheory BaseKB)
+
+(isa EvanstonMt Microtheory)
+
+(in-microtheory EvanstonMt)
+
+;;are hangouts
+(isa PaneraBread Place)
+(hasWiFiConnection PaneraBread)
+(allowsLingering PaneraBread)
+(canServeJustCaffeine PaneraBread)
+
+(isa Borders Place)
+(hasWiFiConnection Borders)
+(allowsLingering Borders)
+(canServeJustCaffeine Borders)
+
+(isa BarnesAndNoble Place)
+(hasWiFiConnection BarnesAndNoble)
+(allowsLingering BarnesAndNoble)
+(canServeJustCaffeine BarnesAndNoble)
+
+(isa UnicornCafe CS-Hangout)
+(hasWiFiConnection UnicornCafe)
+(allowsLingering UnicornCafe)
+(canServeJustCaffeine UnicornCafe)
+
+;;not hangouts
+(isa TacoBell Place)
+(allowsLingering TacoBell)
+(hasWiFiConnection TacoBell)
+
+(isa WineBar Place)
+(hasWiFiConnection WineBar)
+
+(isa BookmansAlley Place)
+(allowsLingering BookmansAlley)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; End of Code
