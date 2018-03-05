@@ -4,7 +4,11 @@
   (fire::ask-it fact
                 :context 'EverythingPSC :response :bindings))
 
-(defun start-game)
+(defun start-game
+;;Initialize solution first
+;;Distribute the remaining cards
+;;call turn
+)
 
 (defun turn (playerNum)
 (cond ((= playerNum 0) 
