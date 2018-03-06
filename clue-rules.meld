@@ -1,0 +1,31 @@
+;;;; -*-  Mode: LISP; Syntax: Common-Lisp; Base: 10                          -*-
+;;;; ---------------------------------------------------------------------------
+;;;; File name: hangout-ontology.meld
+;;;;    System: FIRE
+;;;;    Author: Ken Forbus
+;;;;   Created: January 27, 2009 09:30:25
+(in-microtheory BaseKB)
+
+(isa ClueMt Microtheory)
+(in-microtheory ClueMt)
+
+;;Make clause that sets solution
+
+;;Make clause that checks solution using finalGuess Predicate
+(<== (makeFinalGuess ?s ?w ?r)
+     (and (isa ?s solutionSuspect)
+          (isa ?w solutionWeapon)
+          (isa ?r solutionRoom)))
+
+(in-microtheory PrologMt)
+(genlMt ClueMt PrologMt)
+;; For illustration: How to implement Prolog's negation by failure.
+;; By controlling whether or not this microtheory is in the logical
+;; environment of a computation, negation by failure can be turned 
+;; off or on easily.  More specialied rules can be developed to
+;; only use it for specific predicates, or for specific circumstances
+;; involving particular types of predicates.
+
+(<== (not ?fact)
+     (uninferredSentence ?fact))
+

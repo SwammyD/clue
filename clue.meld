@@ -50,17 +50,23 @@
 
 ;;Murder Being Solved
 (isa MurderMystery Murder)
-	(and (weaponUsed ?solutionWeapon MurderMystery)
-		(isa ?solutionWeapon Weapon)
-	        (performedBy MurderMystery ?solutionSuspect)
-		(isa ?solutionSuspect Suspect)
-	        (eventOccursAt MurderMystery ?solutionMansionRoom)
-		(isa ?solutionMansionRoom MansionRoom)))
 
-;;To be correct:
-( = (weaponUsed ?Weapon MurderMystery)
-     (weaponUsed ?solutionWeapon MurderMystery))
-(= (performedBy MuderMystery ?solutionSuspect)
-    (performedBy MurderMystery ?Suspect))
-(= (eventOccursAt MuderMystery ?solutionMansionRoom)
-    (eventOccursAt MurderMystery ?MansionRoom))
+(isa solutionWeapon Weapon)
+(isa solutionSuspect MurderSuspect)
+(isa solutionRoom MansionRoom)
+
+
+;;Predicates
+
+(isa makeSolution Predicate)
+(arity makeSolution 3)
+(arg1Isa makeSolution solutionSuspect)
+(arg2Isa makeSolution solutionWeapon)
+(arg3Isa makeSolution solutionRoom)
+
+(isa makeFinalGuess Predicate)
+(arity makeFinalGuess 3)
+(arg1Isa makeFinalGuess MurderSuspect)
+(arg2Isa makeFinalGuess Weapon)
+(arg3Isa makeFinalGuess MansionRoom)
+
