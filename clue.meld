@@ -1,51 +1,66 @@
-;;;; -*-  Mode: LISP; Syntax: Common-Lisp; Base: 10                          -*-
-;;;; ---------------------------------------------------------------------------
-;;;; File name: hangout-ontology.meld
-;;;;    System: FIRE
-;;;;    Author: Anne Barrett
-;;;;   Created: February 2, 2018
-;;;;   Purpose: 371 Assignment three
-;;;; ---------------------------------------------------------------------------
-;;;;  modified: Friday, February 2, 2018
-;;;; ---------------------------------------------------------------------------
-
 (in-microtheory BaseKB)
 
-(isa EvanstonMt Microtheory)
+(isa ClueMt Microtheory)
+(in-microtheory ClueMt)
 
-(in-microtheory EvanstonMt)
+(isa MansionRoom Collection)
+	(genls MansionRoom RoomInAConstruction)
 
-;;are hangouts
-(isa PaneraBread Place)
-(hasWiFiConnection PaneraBread)
-(allowsLingering PaneraBread)
-(canServeJustCaffeine PaneraBread)
+(isa Kitchen MansionRoom)
+(isa DiningRoom MansionRoom)
+(isa Lounge MansionRoom)
+(isa Hall MansionRoom)
+(isa Study MansionRoom)
+(isa Conservatory MansionRoom)
+(isa Library MansionRoom)
+(isa Ballroom MansionRoom)
+(isa BilliardRoom MansionRoom)
 
-(isa Borders Place)
-(hasWiFiConnection Borders)
-(allowsLingering Borders)
-(canServeJustCaffeine Borders)
+(permanentlyNorthOf Kitchen DiningRoom)
+(permanentlyNorthOf DiningRoom Lounge)
+(permanentlyEastOf Hall Lounge)
+(permanentlyEastOf Study Hall)
+(permanentlyNorthOf Conservatory BilliardRoom)
+(permanentlyEastOf Conservatory Ballroom)
+(permanentlyNorthOf BilliardRoom Library)
+(permanentlyEastOf BilliardRoom DiningRoom)
+(permanentlyNorthOf Ballroom Hall)
+(permanentlyEastOf Ballroom Kitchen)
+(permanentlyNorthOf Library Study)
+(permanentlyEastOf Library DiningRoom)
 
-(isa BarnesAndNoble Place)
-(hasWiFiConnection BarnesAndNoble)
-(allowsLingering BarnesAndNoble)
-(canServeJustCaffeine BarnesAndNoble)
 
-(isa UnicornCafe CS-Hangout)
-(hasWiFiConnection UnicornCafe)
-(allowsLingering UnicornCafe)
-(canServeJustCaffeine UnicornCafe)
+;;Suspect List
+(isa MurderSuspect Collection)
+	(genls MurderSuspect Agent-Generic)
+(isa MrsWhite MurderSuspect)
+(isa MrGreen MurderSuspect)
+(isa MrsPeacock MurderSuspect)
+(isa ProfessorPlum MurderSuspect)
+(isa MissScarlet MurderSuspect)
+(isa ColonelMustard MurderSuspect)
 
-;;not hangouts
-(isa TacoBell Place)
-(allowsLingering TacoBell)
-(hasWiFiConnection TacoBell)
+;;Weapon List
+(isa pipe Weapon)
+(isa rope Weapon)
+(isa candlestick Weapon)
+(isa wrench Weapon)
+(isa knife Weapon)
+(isa revolver Weapon)
 
-(isa WineBar Place)
-(hasWiFiConnection WineBar)
+;;Murder Being Solved
+(isa MurderMystery Murder)
+	(and (weaponUsed ?solutionWeapon MurderMystery)
+		(isa ?solutionWeapon Weapon)
+	        (performedBy MurderMystery ?solutionSuspect)
+		(isa ?solutionSuspect Suspect)
+	        (eventOccursAt MurderMystery ?solutionMansionRoom)
+		(isa ?solutionMansionRoom MansionRoom)))
 
-(isa BookmansAlley Place)
-(allowsLingering BookmansAlley)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; End of Code
+;;To be correct:
+( = (weaponUsed ?Weapon MurderMystery)
+     (weaponUsed ?solutionWeapon MurderMystery))
+(= (performedBy MuderMystery ?solutionSuspect)
+    (performedBy MurderMystery ?Suspect))
+(= (eventOccursAt MuderMystery ?solutionMansionRoom)
+    (eventOccursAt MurderMystery ?MansionRoom))
