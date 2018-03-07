@@ -1,13 +1,66 @@
-;;(load "C:\\Users\\Anne\\Documents\\EECS\\EECS 371\\testFunc.LISP")
+;;(load "C:\\Users\\ramen\\Documents\\Github\\clue\\testFunc.LISP")
 
-(defun test-ask (fact)
-  (fire::ask-it fact
-                :context 'EverythingPSC :response :bindings))
+;;(defun test-ask (fact)
+;;  (fire::ask-it fact
+;;                :context 'EverythingPSC :response :bindings))
 
-(defun start-game
-;;Initialize solution first
-;;Distribute the remaining cards
-;;call turn
+;; initialize the deck
+(setq allSuspects '("white" "green" "peacock" "plum" "scarlet" "mustard"))
+(setq allWeapons '("pipe" "rope" "candlestick" "wrench" "knife" "revolver"))
+(setq allLocations '("kitchen" "diningRoom" "lounge" "hall" "study" "conservatory" "billiardRoom" "ballroom" "library"))
+(setq solution '())
+
+;; player hands
+(setq p1hand '())
+(setq p2hand '())
+(setq p3hand '())
+
+;; Cards players have seen
+(setq p1seen '())
+(setq p2seen '())
+(setq p3seen '())
+
+(defun start-game ()
+    ;; initialize solution first
+    (let ((posSus (random 6))
+          (posWeap (random 6))
+          (posLoc (random 9))
+          )
+      (setq solution (cons (nth posLoc allLocations) solution))
+      (setq allLocations (remove (nth posloc allLocations) allLocations))
+      (setq solution (cons (nth posWeap allWeapons) solution))
+      (setq allWeapons (remove (nth posWeap allWeapons) allWeapons))
+      (setq solution (cons (nth posSus allSuspects) solution))
+      (setq allSuspects (remove (nth posSus allSuspects) allSuspects))
+      ;; Distribute the remaining cards
+      ;; suspect cards
+      ;; there is definitely a better way to do this, but for now this will do
+      (setq p1hand (cons (nth (random 5) allSuspects) p1hand))
+      (setq allSuspects (remove (car p1hand) allSuspects))
+      (setq p2hand (cons (nth (random 4) allSuspects) p2hand))
+      (setq allSuspects (remove (car p2hand) allSuspects))
+      (setq p3hand (cons (nth (random 3) allSuspects) p3hand))
+      (setq allSuspects (remove (car p3hand) allSuspects))
+      (setq p1hand (cons (nth (random 2) allSuspects) p1hand))
+      (setq allSuspects (remove (car p1hand) allSuspects))
+      (setq p2hand (cons (nth 0 allSuspects) p2hand))
+      (setq allSuspects (remove (car p2hand) allSuspects))
+      ;; weapon cards
+      (setq p3hand (cons (nth (random 5) allWeapons) p3hand))
+      (setq allWeapons (remove (car p3hand) allWeapons))
+      (setq p1hand (cons (nth (random 4) allWeapons) p1hand))
+      (setq allWeapons (remove (car p1hand) allWeapons))
+      (setq p2hand (cons (nth (random 3) allWeapons) p2hand))
+      (setq allWeapons (remove (car p2hand) allWeapons))
+      (setq p3hand (cons (nth (random 2) allWeapons) p3hand))
+      (setq allWeapons (remove (car p3hand) allWeapons))
+      (setq p1hand (cons (nth 0 allWeapons) p1hand))
+      (setq allWeapons (remove (car p1hand) allWeapons))
+      (print solution)
+      ;; still more to do here
+      ;; location cards
+      ;; call turn
+      )
 )
 
 (defun turn (playerNum)
@@ -21,7 +74,7 @@
        (AITurn playerNum)
        (turn 0)))) ;; do stuff for AI 2
 
-(defun playerTurn
+(defun playerTurn ()
 ;;print out cards in hand
 ;;print out cards seen
 ;;ask for interrogation
@@ -39,13 +92,13 @@
 )
 
 (defun interrogate-AI-1
-
+ ()
 )
 
 (defun interrogate-AI-2
-
+ ()
 )
 
 (defun interrogate-player
-
+ ()
 )
