@@ -70,3 +70,8 @@
 (arg2Isa makeFinalGuess Weapon)
 (arg3Isa makeFinalGuess MansionRoom)
 
+(isa checkSolution Predicate)
+(arity makeSolution 3)
+(arg1Isa makeSolution solutionSuspect)
+(arg2Isa makeSolution solutionWeapon)
+(arg3Isa makeSolution solutionRoom)
