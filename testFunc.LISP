@@ -5,9 +5,9 @@
 ;;                :context 'EverythingPSC :response :bindings))
 
 ;; initialize the deck
-(setq allSuspects '("white" "green" "peacock" "plum" "scarlet" "mustard"))
-(setq allWeapons '("pipe" "rope" "candlestick" "wrench" "knife" "revolver"))
-(setq allLocations '("kitchen" "diningRoom" "lounge" "hall" "study" "conservatory" "billiardRoom" "ballroom" "library"))
+(setq allSuspects '(|MrsWhite| |MrGreen| |MrsPeacock| |ProfessorPlum| |MissScarlet| |ColonelMustard|))
+(setq allWeapons '(|pipe| |rope| |candlestick| |wrench| |knife| |revolver|))
+(setq allLocations '(|Kitchen| |DiningRoom| |Lounge| |Hall| |Study| |Conservatory| |BilliardRoom| |Ballroom| |Library|))
 (setq allCards (append (append allSuspects allWeapons) allLocations))
 (setq solution '())
 
@@ -120,6 +120,9 @@
       (setq p2seen p2hand)
       (setq p3seen p3hand)
 
+      ;;Initialize the knowledge base
+      (initialize-kb)
+
       (print solution)
       (print p1hand)
       (print p2hand)
@@ -141,9 +144,9 @@
   (fire::kb-store `(isa ,(caddr solution) solutionRoom) :mt 'ClueMt))
 
 (defun end-game ()
-  (setq allSuspects '("white" "green" "peacock" "plum" "scarlet" "mustard"))
-  (setq allWeapons '("pipe" "rope" "candlestick" "wrench" "knife" "revolver"))
-  (setq allLocations '("kitchen" "diningRoom" "lounge" "hall" "study" "conservatory" "billiardRoom" "ballroom" "library"))
+  (setq allSuspects '(|MrsWhite| |MrGreen| |MrsPeacock| |ProfessorPlum| |MissScarlet| |ColonelMustard|))
+  (setq allWeapons '(|pipe| |rope| |candlestick| |wrench| |knife| |revolver|))
+  (setq allLocations '(|Kitchen| |DiningRoom| |Lounge| |Hall| |Study| |Conservatory| |BilliardRoom| |Ballroom| |Library|))
   (setq solution '())
   (setq p1hand '())
   (setq p2hand '())
@@ -177,6 +180,10 @@
                               (read) (read) (read) #\linefeed)))
   ;; the variable x can be now be read.
   ;; use nth
+  ;;interrogate AIs
+  (interrogate-AI-1 x)
+  (interrogate-AI-2 x)
+
   ;;update the cards seen and the cards not seen
   ;;make final y/n
   ;;if yes, make guess
@@ -188,22 +195,43 @@
   (setq y (cons (nth (cadr x) notSeen) y))
   (setq y (cons (nth (car x) notSeen) y)))
 
+;;This function queries the knowledge base
+;;given a guess in the form of (suspect weapon room)
+(defun query-kb (guess)
+  (fire::query `(makeFinalGuess ,(car guess) ,(cadr guess) ,(caddr guess)) :context 'ClueMt))
+
 (defun AITurn (num)
 ;;scan their cards and cards seen
 ;;formulate a guess with cards not in hand/seen
 ;;interrogate players
+ (cond((= num 1)
+        (interrogate-AI-2)
+        (interrogate-player))
+       (t (interrogate-player)
+          (interrogate-AI-1)))
+
 ;;update cards seen
 ;;make final if no disproving evidencce
 )
 
-(defun interrogate-AI-1
- ()
+(defun interrogate-AI-1 (guess)
+;;Scan AI 1's cards, searching for match to guess
+
+;;return the evidence if found
+;;otherwise return nil
 )
 
-(defun interrogate-AI-2
- ()
+(defun interrogate-AI-2 (guess)
+;;Scan AI 2's cards, searching for match to guess
+
+;;return the evidence if found
+;;otherwise return nil
 )
 
-(defun interrogate-player
- ()
+(defun interrogate-player (guess)
+;;Scan player's cards, searching for match to guess
+
+;;If matches, allow player to choose what to show
+;;Return choice or nil
 )
+
