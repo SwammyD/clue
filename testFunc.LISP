@@ -165,11 +165,19 @@
   (format t "Make a guess. ~A"
     #\linefeed)
   (setq x (read-from-string (format nil "(~A ~A ~A) ~A"
-    (read) (read) (read) #\linefeed)))
-;;update the cards seen and the cards not seen
-;;make final y/n
-;;if yes, make guess
+                              (read) (read) (read) #\linefeed)))
+  ;; the variable x can be now be read.
+  ;; use nth
+  ;;update the cards seen and the cards not seen
+  ;;make final y/n
+  ;;if yes, make guess
   )
+
+(defun make-guess (x notSeen)
+  (setq y '())
+  (setq y (cons (nth (caddr x) notSeen) y))
+  (setq y (cons (nth (cadr x) notSeen) y))
+  (setq y (cons (nth (car x) notSeen) y)))
 
 (defun AITurn (num)
 ;;scan their cards and cards seen
