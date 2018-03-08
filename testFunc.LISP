@@ -26,6 +26,9 @@
 (setq p2notSeen allCards)
 (setq p3notSeen allCards)
 
+;;Flag for end of game
+(setq gameOver 0)
+
 
 (defun start-game ()
     ;; initialize solution first
@@ -155,15 +158,17 @@
   (setq p3hand '()))
 
 (defun turn (playerNum)
-(cond ((= playerNum 0) 
-       (playerTurn)
-       (turn 1));;do stuff for player
-      ((= playerNum 1) 
-       (AITurn playerNum)
-       (turn 2)) ;;do stuff for AI 1
-      ((= playerNum 2) 
-       (AITurn playerNum)
-       (turn 0)))) ;; do stuff for AI 2
+  (cond ((= gameOver 0)
+         (cond ((= playerNum 0) 
+                (playerTurn)
+                (turn 1));;do stuff for player
+               ((= playerNum 1) 
+                (AITurn playerNum)
+                (turn 2)) ;;do stuff for AI 1
+               ((= playerNum 2) 
+                (AITurn playerNum)
+                (turn 0))));; do stuff for AI 2
+        (t (end-game))))
 
 (defun playerTurn ()
   ;;print out cards in hand
@@ -192,30 +197,38 @@
   ;;if yes, make guess
   )
 
-(defun make-guess (x notSeen)
-  (setq y '())
-  (setq y (cons (nth (caddr x) notSeen) y))
-  (setq y (cons (nth (cadr x) notSeen) y))
-  (setq y (cons (nth (car x) notSeen) y)))
+(defun formulate-guess (num)
+)
+
+(defun make-guess (posList notSeen)
+  (let* (guess '())
+    (setq guess (cons (nth (caddr posList) notSeen) guess))
+    (setq guess (cons (nth (cadr posList) notSeen) guess))
+    (setq guess (cons (nth (car posList) notSeen) guess))
+    guess))
 
 ;;This function queries the knowledge base
 ;;given a guess in the form of (suspect weapon room)
 (defun query-kb (guess)
   (fire::query `(makeFinalGuess ,(car guess) ,(cadr guess) ,(caddr guess)) :context 'ClueMt))
 
-(defun AITurn (num)
-;;scan their cards and cards seen
-;;formulate a guess with cards not in hand/seen
-;;interrogate players
- (cond((= num 1)
-        (interrogate-AI-2)
-        (interrogate-player))
-       (t (interrogate-player)
-          (interrogate-AI-1)))
+;;Function updates the cards seen 
+;;It accepts the player number and the card data to add
+(defun update-cards (num shown)
+  (cond ((= num 0) (setq p1seen (cons shown p1seen)))
+        ((= num 1) (setq p2seen (cons shown p2seen)))
+        ((= num 2) (setq p3seen (cons shown p3seen)))))
 
-;;update cards seen
-;;make final if no disproving evidencce
-)
+(defun AITurn (num)
+  (let ((guess (formulate-guess num))
+        (shown nil))
+    (cond((= num 1)
+          (setq shown (interrogate-AI-2 guess))
+          (if (null shown) (setq shown (interrogate-player guess))))
+         (t 
+          (setq shown (interrogate-player guess))
+          (if (null shown) (setq shown (interrogate-AI-1 guess)))))
+    (if shown (query-kb guess) (update-cards num shown))));;If shown is nil, then make a final guess. If not, update cards
 
 ;;Scans AI 1's cards and returns the first match to the guess
 (defun interrogate-AI-1 (guess)
