@@ -1,0 +1,72 @@
+(in-microtheory BaseKB)
+
+(isa ClueMt Microtheory)
+(in-microtheory ClueMt)
+
+(isa MansionRoom Collection)
+	(genls MansionRoom RoomInAConstruction)
+
+(isa Kitchen MansionRoom)
+(isa DiningRoom MansionRoom)
+(isa Lounge MansionRoom)
+(isa Hall MansionRoom)
+(isa Study MansionRoom)
+(isa Conservatory MansionRoom)
+(isa Library MansionRoom)
+(isa Ballroom MansionRoom)
+(isa BilliardRoom MansionRoom)
+
+(permanentlyNorthOf Kitchen DiningRoom)
+(permanentlyNorthOf DiningRoom Lounge)
+(permanentlyEastOf Hall Lounge)
+(permanentlyEastOf Study Hall)
+(permanentlyNorthOf Conservatory BilliardRoom)
+(permanentlyEastOf Conservatory Ballroom)
+(permanentlyNorthOf BilliardRoom Library)
+(permanentlyEastOf BilliardRoom DiningRoom)
+(permanentlyNorthOf Ballroom Hall)
+(permanentlyEastOf Ballroom Kitchen)
+(permanentlyNorthOf Library Study)
+(permanentlyEastOf Library DiningRoom)
+
+
+;;Suspect List
+(isa MurderSuspect Collection)
+	(genls MurderSuspect Agent-Generic)
+(isa MrsWhite MurderSuspect)
+(isa MrGreen MurderSuspect)
+(isa MrsPeacock MurderSuspect)
+(isa ProfessorPlum MurderSuspect)
+(isa MissScarlet MurderSuspect)
+(isa ColonelMustard MurderSuspect)
+
+;;Weapon List
+(isa pipe Weapon)
+(isa rope Weapon)
+(isa candlestick Weapon)
+(isa wrench Weapon)
+(isa knife Weapon)
+(isa revolver Weapon)
+
+;;Murder Being Solved
+(isa MurderMystery Murder)
+
+(isa solutionWeapon Weapon)
+(isa solutionSuspect MurderSuspect)
+(isa solutionRoom MansionRoom)
+
+
+;;Predicates
+
+(isa makeSolution Predicate)
+(arity makeSolution 3)
+(arg1Isa makeSolution solutionSuspect)
+(arg2Isa makeSolution solutionWeapon)
+(arg3Isa makeSolution solutionRoom)
+
+(isa makeFinalGuess Predicate)
+(arity makeFinalGuess 3)
+(arg1Isa makeFinalGuess MurderSuspect)
+(arg2Isa makeFinalGuess Weapon)
+(arg3Isa makeFinalGuess MansionRoom)
+
