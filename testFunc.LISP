@@ -26,6 +26,7 @@
 (setq p2notSeen allCards)
 (setq p3notSeen allCards)
 
+
 (defun start-game ()
     ;; initialize solution first
     (let ((posSus (random 6))
@@ -135,10 +136,11 @@
       )
   )
 
+;;This function stores the solution in the kb
+;;It also clears and reloads the ClueMt
 (defun initialize-kb ()
-  ;;(fire::forget-mt ClueMt)
-  ;;(fire::meld-file->kb "C:\\Users\\Anne\\EECS\\EECS 371\\clue\\clue.meld")
-  ;;(fire::meld-file->kb "C:\\Users\\Anne\\EECS\\EECS 371\\clue\\clue-rules.meld")
+  ;;Forget ClueMt
+  ;;Reload clue.meld and clue-rules.meld
   (fire::kb-store `(isa ,(car solution) solutionSuspect) :mt 'ClueMt)
   (fire::kb-store `(isa ,(cadr solution) solutionWeapon) :mt 'ClueMt)
   (fire::kb-store `(isa ,(caddr solution) solutionRoom) :mt 'ClueMt))
@@ -180,9 +182,10 @@
                               (read) (read) (read) #\linefeed)))
   ;; the variable x can be now be read.
   ;; use nth
+
   ;;interrogate AIs
-  (interrogate-AI-1 x)
-  (interrogate-AI-2 x)
+  ;;(interrogate-AI-1 x)
+  ;;(interrogate-AI-2 x)
 
   ;;update the cards seen and the cards not seen
   ;;make final y/n
@@ -214,19 +217,29 @@
 ;;make final if no disproving evidencce
 )
 
+;;Scans AI 1's cards and returns the first match to the guess
 (defun interrogate-AI-1 (guess)
-;;Scan AI 1's cards, searching for match to guess
+  (let* ((sus (find (car guess) p2hand))
+         (weap (find (cadr guess) p2hand))
+         (loc (find (caddr guess) p2hand))
+         (opts '()))
+    (cond (sus (setq opts sus))
+          (weap (setq opts weap))
+          (loc (setq opts loc))
+          (t nil)) ;;no evidence found
+    opts))
 
-;;return the evidence if found
-;;otherwise return nil
-)
-
+;;Scans AI 2's cards and returns the first match to the guess
 (defun interrogate-AI-2 (guess)
-;;Scan AI 2's cards, searching for match to guess
-
-;;return the evidence if found
-;;otherwise return nil
-)
+  (let* ((sus (find (car guess) p3hand))
+         (weap (find (cadr guess) p3hand))
+         (loc (find (caddr guess) p3hand))
+         (opts '()))
+    (cond (sus (setq opts sus))
+          (weap (setq opts weap))
+          (loc (setq opts loc))
+          (t nil)) ;;no evidence found
+    opts))
 
 (defun interrogate-player (guess)
 ;;Scan player's cards, searching for match to guess
