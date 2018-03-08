@@ -30,6 +30,31 @@
 (setq gameOver 0)
 
 
+(defun deal-cards ()
+    (dotimes (n (list-length allCards))
+      (let* ((card (nth n allCards))
+             (pRan (choose-random-player)))
+        (cond ((= pRan 0)
+               (setq p1hand (cons card p1hand))
+               (setq p1notSeen (remove card p1notSeen)))
+              ((= pRan 1)
+               (setq p2hand (cons card p2hand))
+               (setq p2notSeen (remove card p2notSeen)))
+              ((= pRan 2)
+               (setq p3hand (cons card p3hand))
+               (setq p3notSeen (remove card p3notSeen)))))))
+
+(defun choose-random-player ()
+  (let* ((p1_size (list-length p1hand))
+        (p2_size (list-length p2hand))
+        (p3_size (list-length p3hand))
+        (max_size (max p1_size p2_size p3_size))
+        (nums '()))
+    (if (< p1_size max_size) (setq nums (cons 0 nums)))
+    (if (< p2_size max_size) (setq nums (cons 1 nums)))
+    (if (< p3_size max_size) (setq nums (cons 2 nums)))
+    (if nums (nth (random (list-length nums)) nums) (random 3))))
+
 (defun start-game ()
     ;; initialize solution first
     (let ((posSus (random 6))
@@ -45,79 +70,7 @@
       (setq allCards (remove (cadr solution) allCards))
       (setq allCards (remove (caddr solution) allCards))
       ;; Distribute the remaining cards
-      ;; there is definitely a better way to do this, but for now this will do
-
-      (setq p1hand (cons (nth (random 18) allCards) p1hand))
-      (setq allCards (remove (car p1hand) allCards))
-      (setq p1notSeen (remove (car p1hand) p1notSeen))
-      
-      (setq p2hand (cons (nth (random 17) allCards) p2hand))
-      (setq allCards (remove (car p2hand) allCards))
-      (setq p2notSeen (remove (car p2hand) p2notSeen))
-      
-      (setq p3hand (cons (nth (random 16) allCards) p3hand))
-      (setq allCards (remove (car p3hand) allCards))
-      (setq p3notSeen (remove (car p3hand) p3notSeen))
-      
-      (setq p1hand (cons (nth (random 15) allCards) p1hand))
-      (setq allCards (remove (car p1hand) allCards))
-      (setq p1notSeen (remove (car p1hand) p1notSeen))
-
-      (setq p2hand (cons (nth (random 14) allCards) p2hand))
-      (setq allCards (remove (car p2hand) allCards))
-      (setq p2notSeen (remove (car p2hand) p2notSeen))
- 
-      (setq p3hand (cons (nth (random 13) allCards) p3hand))
-      (setq allCards (remove (car p3hand) allCards))
-      (setq p3notSeen (remove (car p3hand) p3notSeen))
-
-      (setq p1hand (cons (nth (random 12) allCards) p1hand))
-      (setq allCards (remove (car p1hand) allCards))
-      (setq p1notSeen (remove (car p1hand) p1notSeen))
-
-      (setq p2hand (cons (nth (random 11) allCards) p2hand))
-      (setq allCards (remove (car p2hand) allCards))
-      (setq p2notSeen (remove (car p2hand) p2notSeen))
-      
-      (setq p3hand (cons (nth (random 10) allCards) p3hand))
-      (setq allCards (remove (car p3hand) allCards))
-      (setq p3notSeen (remove (car p3hand) p3notSeen))
-
-      (setq p1hand (cons (nth (random 9) allCards) p1hand))
-      (setq allCards (remove (car p1hand) allCards))
-      (setq p1notSeen (remove (car p1hand) p1notSeen))
-
-      (setq p2hand (cons (nth (random 8) allCards) p2hand))
-      (setq allCards (remove (car p2hand) allCards))
-      (setq p2notSeen (remove (car p2hand) p2notSeen))
-      
-      (setq p3hand (cons (nth (random 7) allCards) p3hand))
-      (setq allCards (remove (car p3hand) allCards))
-      (setq p3notSeen (remove (car p3hand) p3notSeen))
-
-      (setq p1hand (cons (nth (random 6) allCards) p1hand))
-      (setq allCards (remove (car p1hand) allCards))
-      (setq p1notSeen (remove (car p1hand) p1notSeen))
-
-      (setq p2hand (cons (nth (random 5) allCards) p2hand))
-      (setq allCards (remove (car p2hand) allCards))
-      (setq p2notSeen (remove (car p2hand) p2notSeen))
-      
-      (setq p3hand (cons (nth (random 4) allCards) p3hand))
-      (setq allCards (remove (car p3hand) allCards))
-      (setq p3notSeen (remove (car p3hand) p3notSeen))
-
-      (setq p1hand (cons (nth (random 3) allCards) p1hand))
-      (setq allCards (remove (car p1hand) allCards))
-      (setq p1notSeen (remove (car p1hand) p1notSeen))
-
-      (setq p2hand (cons (nth (random 2) allCards) p2hand))
-      (setq allCards (remove (car p2hand) allCards))
-      (setq p2notSeen (remove (car p2hand) p2notSeen))
-      
-      (setq p3hand (cons (nth 0 allCards) p3hand))
-      (setq allCards (remove (car p3hand) allCards))
-      (setq p3notSeen (remove (car p3hand) p3notSeen))
+      (deal-cards)
 
       ;; set cards seen for all players
       (setq p1seen p2hand)
