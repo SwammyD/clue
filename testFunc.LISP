@@ -149,6 +149,7 @@
   (fire::kb-store `(isa ,(caddr solution) solutionRoom) :mt 'ClueMt))
 
 (defun end-game ()
+  (setq gameOver 1)
   (setq allSuspects '(|MrsWhite| |MrGreen| |MrsPeacock| |ProfessorPlum| |MissScarlet| |ColonelMustard|))
   (setq allWeapons '(|pipe| |rope| |candlestick| |wrench| |knife| |revolver|))
   (setq allLocations '(|Kitchen| |DiningRoom| |Lounge| |Hall| |Study| |Conservatory| |BilliardRoom| |Ballroom| |Library|))
@@ -197,6 +198,7 @@
   ;;if yes, make guess
   )
 
+;;Creates guess logic for the AIs in format and passes to make-guess
 (defun formulate-guess (num)
 )
 
@@ -215,9 +217,9 @@
 ;;Function updates the cards seen 
 ;;It accepts the player number and the card data to add
 (defun update-cards (num shown)
-  (cond ((= num 0) (setq p1seen (cons shown p1seen)))
-        ((= num 1) (setq p2seen (cons shown p2seen)))
-        ((= num 2) (setq p3seen (cons shown p3seen)))))
+  (cond ((= num 0) (setq p1seen (cons shown p1seen)) (setq p1notSeen (remove shown p1notSeen)))
+        ((= num 1) (setq p2seen (cons shown p2seen)) (setq p2notSeen (remove shown p2notSeen)))
+        ((= num 2) (setq p3seen (cons shown p3seen)) (setq p3notSeen (remove shown p3notSeen)))))
 
 (defun AITurn (num)
   (let ((guess (formulate-guess num))
