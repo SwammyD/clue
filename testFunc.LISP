@@ -78,7 +78,7 @@
       (print p2hand)
       (print p3hand)
       ;; call turn
-      ;; (turn 0)
+      ;; (turn (random 3))
       )
   )
 
