@@ -144,10 +144,11 @@
   ;; use nth
 
   ;;interrogate AIs
-  ;;(interrogate-AI-1 x)
-  ;;(interrogate-AI-2 x)
+  (let* (AIres (interrogate-AI-1 guess))
+    (cond (AIres (update-cards 0 AIres))
+          (t (setq AIres (interrogate-AI-2 guess))
+             (if AIres (update-cards 0 AIres)))))
 
-  ;;update the cards seen and the cards not seen
   ;;make final y/n
   ;;if yes, make guess
   )
@@ -192,11 +193,10 @@
          (weap (find (cadr guess) p2hand))
          (loc (find (caddr guess) p2hand))
          (opts '()))
-    (cond (sus (setq opts sus))
-          (weap (setq opts weap))
-          (loc (setq opts loc))
-          (t nil)) ;;no evidence found
-    opts))
+    (if sus (setq opts (cons sus opts)))
+    (if weap (setq opts (cons weap opts)))
+    (if loc (setq opts (cons loc opts)))
+    (if opts (nth (random (list-length opts)) opts) nil))) ;;no evidence found
 
 ;;Scans AI 2's cards and returns the first match to the guess
 (defun interrogate-AI-2 (guess)
@@ -204,11 +204,10 @@
          (weap (find (cadr guess) p3hand))
          (loc (find (caddr guess) p3hand))
          (opts '()))
-    (cond (sus (setq opts sus))
-          (weap (setq opts weap))
-          (loc (setq opts loc))
-          (t nil)) ;;no evidence found
-    opts))
+    (if sus (setq opts (cons sus opts)))
+    (if weap (setq opts (cons weap opts)))
+    (if loc (setq opts (cons loc opts)))
+    (if opts (nth (random (list-length opts)) opts) nil)))
 
 (defun interrogate-player (guess)
 ;;Scan player's cards, searching for match to guess
