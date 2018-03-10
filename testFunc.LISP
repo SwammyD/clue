@@ -73,7 +73,7 @@
       (deal-cards)
 
       ;; set cards seen for all players
-      (setq p1seen p2hand)
+      (setq p1seen p1hand)
       (setq p2seen p2hand)
       (setq p3seen p3hand)
 
