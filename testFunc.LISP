@@ -176,6 +176,9 @@
         ((= num 1) (setq p2seen (cons shown p2seen)) (setq p2notSeen (remove shown p2notSeen)))
         ((= num 2) (setq p3seen (cons shown p3seen)) (setq p3notSeen (remove shown p3notSeen)))))
 
+;;Formulates a guess based on the turn num
+;;interrogates player and AI
+;;makes the final guess if no evidence, otherwise updates cards
 (defun AITurn (num)
   (let ((guess (formulate-guess num))
         (shown nil))
@@ -209,10 +212,33 @@
     (if loc (setq opts (cons loc opts)))
     (if opts (nth (random (list-length opts)) opts) nil)))
 
+;;Scans player's cards for items that match
+;;If match, calls choose-card with matches
+;;returns nil if no match, or chosen card otherwise
 (defun interrogate-player (guess)
-;;Scan player's cards, searching for match to guess
+  (let* ((sus (find (car guess) p1hand))
+         (weap (find (cadr guess) p1hand))
+         (loc (find (caddr guess) p1hand))
+         (opts '())
+         (card))
+    (if sus (setq opts (cons sus opts)))
+    (if weap (setq opts (cons weap opts)))
+    (if loc (setq opts (cons loc opts)))
+    (if opts (setq card (choose-card opts))
+      (format t "You have no cards that match the guess!"))
+    card))
 
-;;If matches, allow player to choose what to show
-;;Return choice or nil
-)
+;;Takes optional list of choices
+;;Formats the choices with indices in list
+;;Asks user to choose the card
+;;Returns the chosen card from the list
+(defun choose-card (&optional (choices '()))
+  (if (null choices) (setq choices p1notSeen))
+  (setq x 0)
+  (dolist (card choices)
+    (format t "~% ~d: ~A" x card)
+    (setq x (+ x 1)))
+  (format t "~%Choose a card by inputting the number: ")
+  (setq x (read))
+  (nth x choices))
 
