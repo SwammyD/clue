@@ -154,10 +154,11 @@
   (setq guess (make-guess-player x))
 
   ;;interrogate AIs
-  (let* (AIres (interrogate-AI-1 guess))
-    (cond (AIres (update-cards 0 AIres))
+  (let ((AIres (interrogate-AI-1 guess)))
+      (cond (AIres (update-cards 0 AIres))
           (t (setq AIres (interrogate-AI-2 guess))
-             (if AIres (update-cards 0 AIres)))))
+             (if AIres (update-cards 0 AIres)
+               (format t "It seems nobody can refute you guess. Do you wish to make your final accusation? (Y/N)")))))
 
   ;;make final y/n
   ;;if yes, make guess
@@ -168,7 +169,7 @@
 )
 
 (defun make-guess-player (posList)
-  (let* (guess '())
+  (let* ((guess '()))
     (setq guess (cons (nth (caddr posList) p1notSeen) guess))
     (setq guess (cons (nth (cadr posList) p1notSeen) guess))
     (setq guess (cons (nth (car posList) p1notSeen) guess))
