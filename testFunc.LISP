@@ -107,10 +107,19 @@
   (setq allSuspects '(|MrsWhite| |MrGreen| |MrsPeacock| |ProfessorPlum| |MissScarlet| |ColonelMustard|))
   (setq allWeapons '(|pipe| |rope| |candlestick| |wrench| |knife| |revolver|))
   (setq allLocations '(|Kitchen| |DiningRoom| |Lounge| |Hall| |Study| |Conservatory| |BilliardRoom| |Ballroom| |Library|))
+  (setq allCards (append (append allSuspects allWeapons) allLocations))
   (setq solution '())
   (setq p1hand '())
   (setq p2hand '())
-  (setq p3hand '()))
+  (setq p3hand '())
+  
+  (setq p1seen '())
+  (setq p2seen '())
+  (setq p3seen '())
+  
+  (setq p1notSeen allCards)
+  (setq p2notSeen allCards)
+  (setq p3notSeen allCards))
 
 (defun turn (playerNum)
   (cond ((= gameOver 0)
