@@ -142,10 +142,11 @@
                               (read) (read) (read) #\linefeed)))
   ;; the variable x can be now be read.
   ;; use nth
+  (setq guess (make-guess-player x))
 
   ;;interrogate AIs
-  ;;(interrogate-AI-1 x)
-  ;;(interrogate-AI-2 x)
+  ;;(interrogate-AI-1 guess)
+  ;;(interrogate-AI-2 guess)
 
   ;;update the cards seen and the cards not seen
   ;;make final y/n
@@ -156,11 +157,11 @@
 (defun formulate-guess (num)
 )
 
-(defun make-guess (posList notSeen)
+(defun make-guess-player (posList)
   (let* (guess '())
-    (setq guess (cons (nth (caddr posList) notSeen) guess))
-    (setq guess (cons (nth (cadr posList) notSeen) guess))
-    (setq guess (cons (nth (car posList) notSeen) guess))
+    (setq guess (cons (nth (caddr posList) p1notSeen) guess))
+    (setq guess (cons (nth (cadr posList) p1notSeen) guess))
+    (setq guess (cons (nth (car posList) p1notSeen) guess))
     guess))
 
 ;;This function queries the knowledge base
