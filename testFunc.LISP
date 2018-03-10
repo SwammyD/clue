@@ -74,7 +74,7 @@
       (deal-cards)
 
       ;; set cards seen for all players
-      (setq p1seen p2hand)
+      (setq p1seen p1hand)
       (setq p2seen p2hand)
       (setq p3seen p3hand)
 
@@ -107,10 +107,19 @@
   (setq allSuspects '(|MrsWhite| |MrGreen| |MrsPeacock| |ProfessorPlum| |MissScarlet| |ColonelMustard|))
   (setq allWeapons '(|pipe| |rope| |candlestick| |wrench| |knife| |revolver|))
   (setq allLocations '(|Kitchen| |DiningRoom| |Lounge| |Hall| |Study| |Conservatory| |BilliardRoom| |Ballroom| |Library|))
+  (setq allCards (append (append allSuspects allWeapons) allLocations))
   (setq solution '())
   (setq p1hand '())
   (setq p2hand '())
-  (setq p3hand '()))
+  (setq p3hand '())
+  
+  (setq p1seen '())
+  (setq p2seen '())
+  (setq p3seen '())
+  
+  (setq p1notSeen allCards)
+  (setq p2notSeen allCards)
+  (setq p3notSeen allCards))
 
 (defun turn (playerNum)
   (cond ((= gameOver 0)
@@ -142,12 +151,14 @@
                               (read) (read) (read) #\linefeed)))
   ;; the variable x can be now be read.
   ;; use nth
+  (setq guess (make-guess-player x))
 
   ;;interrogate AIs
-  (let* (AIres (interrogate-AI-1 guess))
-    (cond (AIres (update-cards 0 AIres))
+  (let ((AIres (interrogate-AI-1 guess)))
+      (cond (AIres (update-cards 0 AIres))
           (t (setq AIres (interrogate-AI-2 guess))
-             (if AIres (update-cards 0 AIres)))))
+             (if AIres (update-cards 0 AIres)
+               (format t "It seems nobody can refute you guess. Do you wish to make your final accusation? (Y/N)")))))
 
   ;;make final y/n
   ;;if yes, make guess
@@ -157,11 +168,11 @@
 (defun formulate-guess (num)
 )
 
-(defun make-guess (posList notSeen)
-  (let* (guess '())
-    (setq guess (cons (nth (caddr posList) notSeen) guess))
-    (setq guess (cons (nth (cadr posList) notSeen) guess))
-    (setq guess (cons (nth (car posList) notSeen) guess))
+(defun make-guess-player (posList)
+  (let* ((guess '()))
+    (setq guess (cons (nth (caddr posList) p1notSeen) guess))
+    (setq guess (cons (nth (cadr posList) p1notSeen) guess))
+    (setq guess (cons (nth (car posList) p1notSeen) guess))
     guess))
 
 ;;This function queries the knowledge base
