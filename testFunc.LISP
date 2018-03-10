@@ -166,6 +166,30 @@
 
 ;;Creates guess logic for the AIs in format and passes to make-guess
 (defun formulate-guess (num)
+  (cond ((= num 1)  ;; p2
+         (let* ((susPos (set-difference p2notSeen (append allWeapons allLocations)))
+                (weapPos (set-difference p2notSeen (append allSuspects allLocations)))
+                (locPos (set-difference p2notSeen (append allSuspects allWeapons)))
+                (sus (nth (random (list-length susPos)) susPos))
+                (weap (nth (random (list-length weapPos)) weapPos))
+                (loc (nth (random (list-length locPos)) locPos))
+                (guess '()))
+           (push loc guess)
+           (push weap guess)
+           (push sus guess)
+           guess))
+        ((= num 2)  ;; p3
+         (let* ((susPos (set-difference p3notSeen (append allWeapons allLocations)))
+                (weapPos (set-difference p3notSeen (append allSuspects allLocations)))
+                (locPos (set-difference p3notSeen (append allSuspects allWeapons)))
+                (sus (nth (random (list-length susPos)) susPos))
+                (weap (nth (random (list-length weapPos)) weapPos))
+                (loc (nth (random (list-length locPos)) locPos))
+                (guess '()))
+           (push loc guess)
+           (push weap guess)
+           (push sus guess)
+           guess)))
 )
 
 (defun make-guess-player (posList)
@@ -196,9 +220,9 @@
     (cond((= num 1)
           (setq shown (interrogate-AI-2 guess))
           (if (null shown) (setq shown (interrogate-player guess))))
-         (t 
-          (setq shown (interrogate-player guess))
-          (if (null shown) (setq shown (interrogate-AI-1 guess)))))
+          (t 
+           (setq shown (interrogate-player guess))
+           (if (null shown) (setq shown (interrogate-AI-1 guess)))))
     (if shown (query-kb guess) (update-cards num shown))));;If shown is nil, then make a final guess. If not, update cards
 
 ;;Scans AI 1's cards and returns the first match to the guess
