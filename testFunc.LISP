@@ -46,10 +46,10 @@
 
 (defun choose-random-player ()
   (let* ((p1_size (list-length p1hand))
-        (p2_size (list-length p2hand))
-        (p3_size (list-length p3hand))
-        (max_size (max p1_size p2_size p3_size))
-        (nums '()))
+         (p2_size (list-length p2hand))
+         (p3_size (list-length p3hand))
+         (max_size (max p1_size p2_size p3_size))
+         (nums '()))
     (if (< p1_size max_size) (setq nums (cons 0 nums)))
     (if (< p2_size max_size) (setq nums (cons 1 nums)))
     (if (< p3_size max_size) (setq nums (cons 2 nums)))
@@ -69,6 +69,7 @@
       (setq allCards (remove (car solution) allCards))
       (setq allCards (remove (cadr solution) allCards))
       (setq allCards (remove (caddr solution) allCards))
+
       ;; Distribute the remaining cards
       (deal-cards)
 
