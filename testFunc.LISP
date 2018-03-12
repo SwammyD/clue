@@ -1,13 +1,9 @@
 ;;(load "C:\\Users\\ramen\\Documents\\Github\\clue\\testFunc.LISP")
 
-;;(defun test-ask (fact)
-;;  (fire::ask-it fact
-;;                :context 'EverythingPSC :response :bindings))
-
 ;; initialize the deck
-(setq allSuspects '(|MrsWhite| |MrGreen| |MrsPeacock| |ProfessorPlum| |MissScarlet| |ColonelMustard|))
-(setq allWeapons '(|pipe| |rope| |candlestick| |wrench| |knife| |revolver|))
-(setq allLocations '(|Kitchen| |DiningRoom| |Lounge| |Hall| |Study| |Conservatory| |BilliardRoom| |Ballroom| |Library|))
+(setq allSuspects '(MrsWhite MrGreen MrsPeacock ProfessorPlum MissScarlet ColonelMustard))
+(setq allWeapons '(pipe rope candlestick wrench knife revolver))
+(setq allLocations '(Kitchen DiningRoom Lounge Hall Study Conservatory BilliardRoom Ballroom Library))
 (setq allCards (append (append allSuspects allWeapons) allLocations))
 (setq solution '())
 
@@ -64,11 +60,8 @@
           (posWeap (random 6))
           (posLoc (random 9)))
       (setq solution (cons (nth posLoc allLocations) solution))
-      ;;(setq allLocations (remove (nth posLoc allLocations) allLocations))
       (setq solution (cons (nth posWeap allWeapons) solution))
-      ;;(setq allWeapons (remove (nth posWeap allWeapons) allWeapons))
       (setq solution (cons (nth posSus allSuspects) solution))
-      ;;(setq allSuspects (remove (nth posSus allSuspects) allSuspects))
       (setq allCards (remove (car solution) allCards))
       (setq allCards (remove (cadr solution) allCards))
       (setq allCards (remove (caddr solution) allCards))
@@ -95,15 +88,17 @@
 (defun initialize-kb ()
   ;;Forget ClueMt
   ;;Reload clue.meld and clue-rules.meld
+  (fire::meld-file->kb "C:\\Users\\Anne\\Documents\\EECS\\EECS 371\\clue\\clue.meld")
+  (fire::meld-file->kb "C:\\Users\\Anne\\Documents\\EECS\\EECS 371\\clue\\clue-rules.meld")
   (fire::kb-store `(isa ,(car solution) solutionSuspect) :mt 'ClueMt)
   (fire::kb-store `(isa ,(cadr solution) solutionWeapon) :mt 'ClueMt)
   (fire::kb-store `(isa ,(caddr solution) solutionRoom) :mt 'ClueMt))
 
 (defun end-game ()
   (setq gameOver 1)
-  (setq allSuspects '(|MrsWhite| |MrGreen| |MrsPeacock| |ProfessorPlum| |MissScarlet| |ColonelMustard|))
-  (setq allWeapons '(|pipe| |rope| |candlestick| |wrench| |knife| |revolver|))
-  (setq allLocations '(|Kitchen| |DiningRoom| |Lounge| |Hall| |Study| |Conservatory| |BilliardRoom| |Ballroom| |Library|))
+  (setq allSuspects '(MrsWhite MrGreen MrsPeacock ProfessorPlum MissScarlet ColonelMustard))
+  (setq allWeapons '(pipe rope candlestick wrench knife revolver))
+  (setq allLocations '(Kitchen DiningRoom Lounge Hall Study Conservatory BilliardRoom Ballroom Library))
   (setq allCards (append (append allSuspects allWeapons) allLocations))
   (setq solution '())
   (setq p1hand '())
@@ -117,6 +112,7 @@
   (setq p1notSeen allCards)
   (setq p2notSeen allCards)
   (setq p3notSeen allCards)
+  (forget-mt 'ClueMt)
   (format t "~%Game Over. Type (start-game) to play again!"))
 
 (defun turn (playerNum)
@@ -160,8 +156,7 @@
   ;;ask for interrogation
   (format t "Make a guess. ~A"
     #\linefeed)
-  ;;(setq x (read-from-string (format nil "(~A ~A ~A) ~A"
-    ;;                          (read) (read) (read) #\linefeed)))
+  
   ;; the variable x can be now be read.
   ;; use nth
   (setq guess '())
@@ -205,18 +200,11 @@
     (setq guess (cons weaps locs))
     (setq guess (cons sus guess))))
 
-(defun make-guess-player (posList)
-  (let* ((guess '()))
-    (setq guess (cons (nth (caddr posList) p1notSeen) guess))
-    (setq guess (cons (nth (cadr posList) p1notSeen) guess))
-    (setq guess (cons (nth (car posList) p1notSeen) guess))
-    guess))
-
 ;;This function queries the knowledge base
 ;;given a guess in the form of (suspect weapon room)
 (defun query-kb (guess)
-  (setq q (fire::ask-it `(makeFinalGuess ,(car guess) ,(cadr guess) ,(cddr guess)) :context 'ClueMt))
-  (if q (format t "~%You are correct.)") (format t "~%That wasn't correct. You lose."))
+  (setq q (fire::query `(makeFinalGuess ,(car guess) ,(cadr guess) ,(cddr guess)) :context 'ClueMt))
+  (if q (format t "~%You are correct! You win!") (format t "~%That wasn't correct. You lose."))
   (format t "~%The solution was ~A " solution)
   (end-game))
 
@@ -240,7 +228,10 @@
          (t 
           (setq shown (interrogate-player guess))
           (if (null shown) (setq shown (interrogate-AI-1 guess)))))
-    (if (null shown) (query-kb guess) (update-cards num shown))));;If shown is nil, then make a final guess. If not, update cards
+    (cond((null shown)
+          (format t "~%Player ~d is making a final guess!" (+ num 1))
+          (query-kb guess))
+         (t (update-cards num shown)))))
 
 ;;Scans AI 1's cards and returns the first match to the guess
 (defun interrogate-AI-1 (guess)
