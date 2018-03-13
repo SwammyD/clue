@@ -1,4 +1,17 @@
-;;(load "C:\\Users\\ramen\\Documents\\Github\\clue\\testFunc.LISP")
+;;*******IMPORTANT******
+;;The path names to clue.meld and clue-rules.meld must be set to the correct paths for the game to work properly
+;;They can be changed in this first function below
+
+;;This function stores the solution in the kb
+;;It also clears and reloads the ClueMt
+(defun initialize-kb ()
+  ;;Forget ClueMt
+  ;;Reload clue.meld and clue-rules.meld
+  (fire::meld-file->kb "C:\\Users\\Anne\\Documents\\EECS\\EECS 371\\clue\\clue.meld")
+  (fire::meld-file->kb "C:\\Users\\Anne\\Documents\\EECS\\EECS 371\\clue\\clue-rules.meld")
+  (fire::kb-store `(isa ,(car solution) solutionSuspect) :mt 'ClueMt)
+  (fire::kb-store `(isa ,(cadr solution) solutionWeapon) :mt 'ClueMt)
+  (fire::kb-store `(isa ,(caddr solution) solutionRoom) :mt 'ClueMt))
 
 ;; initialize the deck
 (setq allSuspects '(MrsWhite MrGreen MrsPeacock ProfessorPlum MissScarlet ColonelMustard))
@@ -82,16 +95,7 @@
       ;; call turn
       (turn 0)))
 
-;;This function stores the solution in the kb
-;;It also clears and reloads the ClueMt
-(defun initialize-kb ()
-  ;;Forget ClueMt
-  ;;Reload clue.meld and clue-rules.meld
-  (fire::meld-file->kb "C:\\Users\\Anne\\Documents\\EECS\\EECS 371\\clue\\clue.meld")
-  (fire::meld-file->kb "C:\\Users\\Anne\\Documents\\EECS\\EECS 371\\clue\\clue-rules.meld")
-  (fire::kb-store `(isa ,(car solution) solutionSuspect) :mt 'ClueMt)
-  (fire::kb-store `(isa ,(cadr solution) solutionWeapon) :mt 'ClueMt)
-  (fire::kb-store `(isa ,(caddr solution) solutionRoom) :mt 'ClueMt))
+
 
 (defun end-game ()
   (setq gameOver 1)
@@ -206,7 +210,8 @@
 ;;given a guess in the form of (suspect weapon room)
 (defun query-kb (guess)
   (setq q (fire::query `(makeFinalGuess ,(car guess) ,(cadr guess) ,(cddr guess)) :context 'ClueMt))
-  (if q (format t "~%You are correct! You win!") (format t "~%That wasn't correct. You lose."))
+  (format t "~%The Game Overlord Says: ")
+  (if q (format t "You are correct! You win!") (format t "~%That wasn't correct. You lose."))
   (format t "~%The solution was ~A " solution)
   (end-game))
 
