@@ -1,15 +1,13 @@
 ;;;; -*-  Mode: LISP; Syntax: Common-Lisp; Base: 10                          -*-
 ;;;; ---------------------------------------------------------------------------
-;;;; File name: hangout-ontology.meld
+;;;; File name: clue-rules.meld
 ;;;;    System: FIRE
-;;;;    Author: Ken Forbus
-;;;;   Created: January 27, 2009 09:30:25
+;;;;    Author: Anne Barrett
+
 (in-microtheory BaseKB)
 
 (isa ClueMt Microtheory)
 (in-microtheory ClueMt)
-
-;;Make clause that sets solution
 
 ;;Make clause that checks solution using finalGuess Predicate
 (<== (makeFinalGuess ?s ?w ?r)
