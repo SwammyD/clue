@@ -79,7 +79,6 @@
       ;;Initialize the knowledge base
       (initialize-kb)
 
-      (print solution)
       ;; call turn
       (turn 0)))
 
@@ -145,7 +144,7 @@
 
 (defun playerTurn ()
   ;;print out cards in hand
-  (format t "Your cards: ~A ~A"
+  (format t "~%Your cards: ~A ~A"
     p1hand #\linefeed)
   ;;print out cards seen
   (format t "Cards you have seen: ~A ~A"
@@ -161,8 +160,11 @@
   ;; use nth
   (setq guess '())
   (dotimes (n 3)
-    (setq guess (cons (choose-card) guess)))
-  (setq guess (format-guess guess))
+    (setq lst (cond((= n 2) (set-difference allLocations p1seen))
+                   ((= n 1) (set-difference allWeapons p1seen))
+                   ((= n 0) (set-difference allSuspects p1seen))))
+    (setq guess (cons (choose-card lst) guess)))
+  (setq guess (format-guess (reverse guess)))
   (print guess)
 
   ;;interrogate AIs
